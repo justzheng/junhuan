@@ -1,0 +1,73 @@
+<?php
+/**
+ * User: leeyifiei
+ * Date: 17/4/14
+ */
+
+namespace cyr\junhuan;
+
+class PayService extends PaybaseService
+{
+    public $request_url = PAY_URL;
+    public $transac_code = TRANSAC_PAYCREATE;
+
+    public $transTime;
+    public $appName;
+    public $appVersion;
+    public $notifyUrl;
+    public $redirectUrl;
+    public $amount;
+    public $orderNo;
+    public $orderDate;
+    public $busCode;
+    public $quantity;
+    public $remark1;
+    public $remark2;
+    public $remark3;
+    public $comm_para;
+    public $payerName;
+    public $feeData;
+
+    public function getPayorderHtml()
+    {
+        return $this->request((array)$this, false, false);
+    }
+
+    public function createFeeData()
+    {
+        return new FeeData();
+    }
+
+    public function setFeeData($feeData)
+    {
+        $this->feeData[] = (array)$feeData;
+    }
+
+}
+
+class FeeData
+{
+
+    public $eBillCode;
+    public $orgUnicode;
+    public $note1;
+    public $note2;
+    public $sum;
+    public $payerName;
+    public $chrgDetail;
+
+    public function setNote1($jdsbh, $hphm, $wfsj, $fkje, $znj, $cjjg, $cljg, $dsrxm)
+    {
+        $args = func_get_args();
+
+        $this->note1 = implode('|', $args);
+    }
+
+    public function setNote2($jkbh, $hphm, $wfsj, $fkje, $znj, $cjjg, $cljg, $dsrxm)
+    {
+        $args = func_get_args();
+
+        $this->note2 = implode('|', $args);
+    }
+}
+
