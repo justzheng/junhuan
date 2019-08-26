@@ -11,24 +11,21 @@ class PayService extends PaybaseService
     public $request_url = PAY_XF_SEARCH;
     public $transac_code = TRANSAC_XF_QUERY;
 
-    public $transTime;
-    public $appName;
-    public $appVersion;
-    public $notifyUrl;
-    public $redirectUrl;
-    public $amount;
     public $orderNo;
-    public $orderDate;
-    public $busCode;
-    public $quantity;
-    public $remark1;
-    public $remark2;
-    public $remark3;
-    public $comm_para;
-    public $payerName;
-    public $feeData;
+    public $xfksbh;
+    public $xfksrq;
+    public $openid;
+    public $jszhm;
+    public $jkbh;
+    public $returnUrl;
+    public $notifyUrl;
 
     public function getPayorderHtml()
+    {
+        return $this->request((array)$this, false, false);
+    }
+
+    public function getQuery()
     {
         return $this->request((array)$this, false, false);
     }
