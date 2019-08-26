@@ -8,8 +8,8 @@ namespace cyr\junhuan;
 
 class PayService extends PaybaseService
 {
-    public $request_url = PAY_URL;
-    public $transac_code = TRANSAC_PAYCREATE;
+    public $request_url = PAY_XF_SEARCH;
+    public $transac_code = TRANSAC_XF_QUERY;
 
     public $transTime;
     public $appName;
