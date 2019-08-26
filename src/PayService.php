@@ -25,10 +25,6 @@ class PayService extends PaybaseService
         return $this->request((array)$this, false, false);
     }
 
-    public function getQuery()
-    {
-        return $this->request((array)$this, false, false);
-    }
 
     public function createFeeData()
     {
