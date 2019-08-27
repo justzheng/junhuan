@@ -8,8 +8,8 @@ namespace cyr\junhuan;
 
 class OrderQueryService extends PaybaseService
 {
-    public $request_url = PAY_QUERY;
-    public $transac_code = TRANSAC_QUERY;
+    public $request_url = PAY_XF_SEARCH;
+    public $transac_code = TRANSAC_XF_QUERY;
 
     public function query($orderNo)
     {

@@ -13,6 +13,9 @@
     "autoload": {
         "psr-4": {
             "cyr\\junhuan\\": "src/"
-        }
+        },
+        "files": [
+            "src/common.php"
+        ]
     }
 }

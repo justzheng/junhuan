@@ -9,14 +9,27 @@ namespace cyr\junhuan;
 class NotifyRewriteService extends PaybaseService
 {
 
-    public $request_url = PAY_REWRITE;
-    public $transac_code = TRANSAC_REWRITE;
+    public $request_url = PAY_XF_SEARCH;
+    public $transac_code = TRANSAC_XF_QUERY_JGTZ;
 
-    public function notifyConfirm($orderNo, $transTime)
+    public $orderNo;
+    public $xfksbh;
+    public $xfksrq;
+    public $jszhm;
+    public $jkbh;
+    public $result;
+    public $msg;
+
+    public function notifyConfirm()
     {
         return $this->request([
-            'orderNo' => $orderNo,
-            'transTime' => $transTime,
+            'orderNo' => $this->orderNo,
+            'xfksbh' => $this->xfksbh,
+            'xfksrq' => $this->xfksrq,
+            'jszhm' => $this->jszhm,
+            'jkbh' => $this->jkbh,
+            'result' => $this->result,
+            'msg' => $this->msg,
         ], true, false);
     }
 
