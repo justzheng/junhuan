@@ -1,8 +1,4 @@
 <?php
-/**
- * User: leeyifiei
- * Date: 17/4/14
- */
 
 namespace cyr\junhuan;
 
@@ -18,6 +14,7 @@ class PaybaseService extends Object
     public $charset;
     public $private_key_path;
     public $public_key_path;
+    public $purl;
 
     public $request_url;
     public $transac_code;
@@ -25,10 +22,8 @@ class PaybaseService extends Object
     public function request($data, $doconvert = true, $doverify = true)
     {
         $request_data = $this->_build_paybase_requestdata($data);
-
         $client = new Client();
         !isset(Yii::$app->charset) && Yii::$app->charset = 'UTF-8';
-
         $response = $client->createRequest()
             ->setMethod('POST')
             ->setUrl($this->request_url)
@@ -38,7 +33,7 @@ class PaybaseService extends Object
         if ($response->isOk) {
             if ($doconvert) {
                 $result = $this->_getResult($response->getContent());
-
+                $resp = RsaHelper::decsign($result->respData,$this->private_key_path);
                 if ($result->respCode != '200') {
                     throw new \Exception($result->respMsg);
                 }
@@ -49,11 +44,13 @@ class PaybaseService extends Object
             if ($result == null) {
                 throw new \Exception('reponse null');
             }
-
-            if ($doverify && !$result->validate($this->public_key_path)) {
-                throw new \Exception('sign check fail');
+            //返回数据验签
+            //解密返回数据
+            if ($doverify) {
+                if(!$result->validate($this->purl,$resp)){
+                    throw new \Exception('sign check fail');
+                }
             }
-
             return $result;
         } else {
             throw new \Exception($response->getContent());
@@ -98,10 +95,12 @@ class PaybaseService extends Object
 
         $result = [];
 
-        $json_str = json_encode($data);
+        $json_str = json_encode($data,JSON_UNESCAPED_UNICODE);
         $sign_data = $this->site_code . $this->version . $this->transac_code . $json_str;
 
-        $result['req_data'] = base64_encode($json_str);
+        //先用对方公钥加密,再采用base64编码
+        $result['req_data'] = base64_encode(RsaHelper::reqSign($json_str,$this->public_key_path));
+        //用已方私钥MD5withRSA算法签名，签名内容顺序为：siteCode、version、transacCode和reqdata(加密前的reqdata数据)；再采用Base64编码,（两次）
         $result['signed'] = base64_encode(base64_encode(RsaHelper::sign($sign_data, $this->private_key_path)));
 
         return $result;

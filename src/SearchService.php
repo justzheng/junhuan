@@ -21,15 +21,22 @@ class SearchService extends PaybaseService
     public $hpzl;
 
     public function getQuery(){
-        if(!$this->lsh || $this->jszhm || $this->hphm || $this->fdjh || $this->hpzl )
-        $data= [
-            'lsh' => $this->lsh,
-            'jszhm' => $this->jszhm,
-            'hphm' => $this->hphm,
-            'fdjh' => $this->fdjh,
-            'hpzl' => $this->hpzl,
+        if($this->lsh && $this->jszhm && $this->hphm && $this->fdjh && $this->hpzl ){
+            $data= [
+                'lsh' => $this->lsh,
+                'jszhm' => $this->jszhm,
+                'hphm' => $this->hphm,
+                'fdjh' => $this->fdjh,
+                'hpzl' => $this->hpzl,
             ];
-        $resp = $this->request($data);
-        return $resp;
+            $resp = $this->request($data,true,false);
+            if($resp){
+                $res = RsaHelper::decsign($resp->respData,$this->private_key_path);
+                return $res;
+            }
+            return false;
+        }else{
+            return false;
+        }
     }
 }

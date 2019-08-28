@@ -1,8 +1,4 @@
 <?php
-/**
- * User: leeyifiei
- * Date: 17/2/16
- */
 
 namespace cyr\junhuan;
 
@@ -53,6 +49,77 @@ class RsaHelper
         }
 
         return false;
+    }
+
+    /**
+     * @param $data
+     * @param $pubkey
+     * @return string
+     */
+    public static function reqSign($data,$pubkey){
+        $content = self::getContent($pubkey);
+        if ($content) {
+            $pem = self::transJavaRsaKeyToPhpOpenSSL($content);
+            $pem = self::appendFlags($pem, true);
+            //公钥加密
+            $encrypted = self::encrypt($data,$pem);
+            return $encrypted;
+        }
+
+        return false;
+    }
+    
+    public static function decsign($data,$pubkey){
+        $content = self::getContent($pubkey);
+        if ($content) {
+            $pem = self::transJavaRsaKeyToPhpOpenSSL($content);
+            $pem = self::appendFlags($pem, false);
+ //           openssl_private_decrypt($data,$encrypted,$pem);//私钥解密
+//            $encrypted = base64_encode($encrypted);
+            $encrypted = self::decrypt_RSA($data,$pem);
+            //$encrypted = openssl_public_encrypt($data,$encrypted,$pem);//私钥解密
+            return $encrypted;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $data
+     * @param $pubkey
+     * @return string
+     */
+    public static function decrypt_RSA($data,$publicPEMKey)
+    {
+        $crypto = '';
+
+        foreach (str_split((base64_decode($data)), 128) as $chunk) {
+
+            openssl_private_decrypt($chunk, $decryptData, $publicPEMKey);
+
+            $crypto .= $decryptData;
+        }
+
+        return $crypto;
+    }
+
+    public static function encrypt($originalData,$pem){
+
+        $crypto = '';
+
+        if(strlen($originalData)<=117){
+            openssl_public_encrypt($originalData, $encryptData, $pem);
+            $crypto = $encryptData;
+        }else{
+            foreach (str_split($originalData, 117) as $chunk) {
+
+                openssl_public_encrypt($chunk, $encryptData, $pem);
+
+                $crypto .= $encryptData;
+            }
+        }
+
+        return $crypto;
     }
 
     public static function validate($data, $signature, $rsakeypath)

@@ -16,12 +16,10 @@ class Result
 
     public $signature;
 
-    public function validate($public_key_path)
+    public function validate($public_key_path,$data)
     {
-        $decode_respdata = base64_decode($this->respData);
-
+        $decode_respdata = $data;
         $sign_str = $this->respCode . $this->respMsg . $decode_respdata;
-
         if (RsaHelper::validate($sign_str, base64_decode(base64_decode($this->signature)), $public_key_path)) {
             $this->respData = $decode_respdata;
 
