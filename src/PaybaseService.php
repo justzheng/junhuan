@@ -29,11 +29,11 @@ class PaybaseService extends Object
             ->setUrl($this->request_url)
             ->setData($request_data)
             ->send();
-
+        
         if ($response->isOk) {
             if ($doconvert) {
                 $result = $this->_getResult($response->getContent());
-                $resp = RsaHelper::decsign($result->respData,$this->private_key_path);
+//                $resp = RsaHelper::decsign($result->respData,$this->private_key_path);
                 if ($result->respCode != '200') {
                     throw new \Exception($result->respMsg);
                 }
@@ -47,7 +47,8 @@ class PaybaseService extends Object
             //返回数据验签
             //解密返回数据
             if ($doverify) {
-                if(!$result->validate($this->purl,$resp)){
+                $resp = RsaHelper::decsign($result->respData,$this->private_key_path);
+                if(!$result->xfvalidate($this->public_key_path,$resp)){
                     throw new \Exception('sign check fail');
                 }
             }

@@ -30,6 +30,7 @@ class SearchService extends PaybaseService
                 'hpzl' => $this->hpzl,
             ];
             $resp = $this->request($data,true,false);
+            //用公钥对接口signature验签
             if($resp){
                 $res = RsaHelper::decsign($resp->respData,$this->private_key_path);
                 return $res;
