@@ -10,13 +10,14 @@ class NotifyRewriteService extends PaybaseService
 {
 
     public $request_url = PAY_XF_SEARCH;
-    public $transac_code = TRANSAC_XF_QUERY_JGTZ;
+    public $transac_code = TRANSAC_XF_JGTZ;
 
     public $orderNo;
     public $xfksbh;
     public $xfksrq;
     public $jszhm;
     public $jkbh;
+    public $jdsbh;
     public $result;
     public $msg;
 
@@ -28,6 +29,7 @@ class NotifyRewriteService extends PaybaseService
             'xfksrq' => $this->xfksrq,
             'jszhm' => $this->jszhm,
             'jkbh' => $this->jkbh,
+            'jdsbh' => $this->jdsbh,
             'result' => $this->result,
             'msg' => $this->msg,
         ], true, false);
