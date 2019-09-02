@@ -5,6 +5,7 @@ namespace cyr\junhuan;
 use yii\base\Object;
 use yii\httpclient\Client;
 use yii;
+use yii\httpclient\CurlTransport;
 
 class PaybaseService extends Object
 {
@@ -21,14 +22,25 @@ class PaybaseService extends Object
 
     public function request($data, $doconvert = true, $doverify = true)
     {
+        set_time_limit(0);
         $request_data = $this->_build_paybase_requestdata($data);
+//        $client = new Client();
+//        !isset(Yii::$app->charset) && Yii::$app->charset = 'UTF-8';
+        //$this->request_url = 'http://www.manks.top/document';
+//        $response = $client->createRequest()
+//            ->setMethod('POST')
+//            ->setUrl($this->request_url)
+//            ->setData($request_data)
+//            ->send();
         $client = new Client();
-        !isset(Yii::$app->charset) && Yii::$app->charset = 'UTF-8';
-        $response = $client->createRequest()
-            ->setMethod('POST')
-            ->setUrl($this->request_url)
-            ->setData($request_data)
-            ->send();
+        $client->setTransport(CurlTransport::className());
+        $request = $client->createRequest();
+        $request->setHeaders(['content-type' => 'application/x-www-form-urlencoded'])
+            ->addHeaders(['charset' => 'utf-8']);
+        $request->setUrl($this->request_url);
+        $request->setMethod('post');
+        $request->setData($request_data);
+        $response = $request->send();
         
         if ($response->isOk) {
             if ($doconvert) {
@@ -106,4 +118,5 @@ class PaybaseService extends Object
 
         return $result;
     }
+    
 }
