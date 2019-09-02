@@ -22,7 +22,6 @@ class PaybaseService extends Object
 
     public function request($data, $doconvert = true, $doverify = true)
     {
-        set_time_limit(0);
         $request_data = $this->_build_paybase_requestdata($data);
 //        $client = new Client();
 //        !isset(Yii::$app->charset) && Yii::$app->charset = 'UTF-8';
