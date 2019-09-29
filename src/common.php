@@ -7,8 +7,8 @@
 namespace cyr\junhuan;
 
 
-define('PAY_XF_SEARCH', 'http://www.smtsvspay.com/test/fjfl_xfmf_js/api/service');
-define('PAY_XF_PAY', 'http://www.smtsvspay.com/test/fjfl_xfmf_js/api/pay');
+define('PAY_XF_SEARCH', 'http://www.smtsvspay.com/fjfl_xfmf_js/api/service');
+define('PAY_XF_PAY', 'http://www.smtsvspay.com/fjfl_xfmf_js/api/pay');
 
 //学法免分
 define('TRANSAC_XF_QUERY', 'TRIM_XFMF_JKBHCX');
